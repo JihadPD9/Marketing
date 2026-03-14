@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Konsumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Imports\KonsumenImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KonsumenExport;
+
 
 class KonsumenController extends Controller
 {
@@ -21,9 +25,9 @@ class KonsumenController extends Controller
         // SEARCH (nama, no_hp, email)
         if ($request->search) {
             $query->where(function ($q) use ($request) {
-                $q->where('nama', 'like', '%'.$request->search.'%')
-                  ->orWhere('no_hp', 'like', '%'.$request->search.'%')
-                  ->orWhere('email', 'like', '%'.$request->search.'%');
+                $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('no_hp', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -138,10 +142,10 @@ class KonsumenController extends Controller
         $query = Konsumen::with('user');
 
         if ($request->search) {
-            $query->where(function($q) use ($request) {
-                $q->where('nama', 'like', '%'.$request->search.'%')
-                  ->orWhere('no_hp', 'like', '%'.$request->search.'%')
-                  ->orWhere('email', 'like', '%'.$request->search.'%');
+            $query->where(function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('no_hp', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -158,5 +162,27 @@ class KonsumenController extends Controller
     public function show(Konsumen $konsumen)
     {
         return view('konsumen.show', compact('konsumen'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new KonsumenImport, $request->file('file'));
+
+        return redirect()->route('konsumen.index')
+            ->with('success', 'Data konsumen berhasil diimport');
+    }
+
+    public function export(Request $request)
+    {
+        $status = $request->status;
+
+        return Excel::download(
+            new KonsumenExport($status),
+            'data_konsumen.xlsx'
+        );
     }
 }

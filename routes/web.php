@@ -29,7 +29,7 @@ Route::get('/home', function () {
 // ===============================
 Auth::routes([
     'register' => false,
-    'reset'    => false,
+    'reset' => false,
 ]);
 
 // ===============================
@@ -122,7 +122,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/redirect', function () {
         $user = auth()->user();
 
-        if (!$user) return redirect('/login');
+        if (!$user)
+            return redirect('/login');
 
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -144,3 +145,9 @@ Route::middleware(['auth'])->group(function () {
     })->name('logout');
 
 });
+
+Route::post('/konsumen/import', [KonsumenController::class, 'import'])
+    ->name('konsumen.import');
+
+Route::get('/konsumen/export', [KonsumenController::class, 'export'])
+    ->name('konsumen.export');
