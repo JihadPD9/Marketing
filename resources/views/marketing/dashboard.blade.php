@@ -82,119 +82,133 @@
 
         <div class="row mt-3">
 
-            <div class="col-md-6">
+    <!-- DEAL SUDAH BAYAR -->
+    <div class="col-md-6">
 
-                <div class="card shadow-sm">
+        <div class="card shadow-sm">
 
-                    <div class="card-header">
-                        <h5 class="fw-bold text-success">
-                            <i class="fas fa-money-check-alt"></i> Deal Sudah Bayar
-                        </h5>
-                    </div>
-
-                    <div class="card-body p-0">
-
-                        <table class="table table-sm mb-0">
-
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>No HP</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @forelse($sudahBayar as $k)
-
-                                    <tr>
-                                        <td>{{ $k->nama }}</td>
-                                        <td>{{ $k->no_hp }}</td>
-                                        <td class="text-success fw-bold">
-                                            {{ $k->transaksis?->sum('total') ?? 0 }}
-                                        </td>
-                                    </tr>
-
-                                @empty
-
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted">
-                                            Belum ada pembayaran
-                                        </td>
-                                    </tr>
-
-                                @endforelse
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
+            <div class="card-header">
+                <h5 class="fw-bold text-success">
+                    <i class="fas fa-money-check-alt"></i> Deal Sudah Bayar
+                </h5>
             </div>
 
+            <div class="card-body p-0">
 
+                <table class="table table-sm mb-0">
 
-            <div class="col-md-6">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nama</th>
+                            <th>No HP</th>
+                            <th>Produk</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
 
-                <div class="card shadow-sm">
+                    <tbody>
 
-                    <div class="card-header">
-                        <h5 class="fw-bold text-danger">
-                            <i class="fas fa-clock"></i> Deal Belum Bayar
-                        </h5>
-                    </div>
+                        @forelse($sudahBayar as $k)
 
-                    <div class="card-body p-0">
+                        <tr>
+                            <td>{{ $k->nama }}</td>
+                            <td>{{ $k->no_hp }}</td>
 
-                        <table class="table table-sm mb-0">
+                            <td>
+                                {{ $k->transaksis->first()?->produk?->nama ?? '-' }}
+                            </td>
 
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>No HP</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
+                            <td class="text-success fw-bold">
+                                Rp {{ number_format($k->transaksis->sum('total'),0,',','.') }}
+                            </td>
+                        </tr>
 
-                            <tbody>
+                        @empty
 
-                                @forelse($belumBayar as $k)
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                Belum ada pembayaran
+                            </td>
+                        </tr>
 
-                                    <tr>
-                                        <td>{{ $k->nama }}</td>
-                                        <td>{{ $k->no_hp }}</td>
-                                        <td>
-                                            <span class="badge bg-warning">
-                                                Menunggu Pembayaran
-                                            </span>
-                                        </td>
-                                    </tr>
+                        @endforelse
 
-                                @empty
+                    </tbody>
 
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted">
-                                            Tidak ada data
-                                        </td>
-                                    </tr>
-
-                                @endforelse
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
+                </table>
 
             </div>
 
         </div>
+
+    </div>
+
+
+
+    <!-- DEAL BELUM BAYAR -->
+    <div class="col-md-6">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header">
+                <h5 class="fw-bold text-danger">
+                    <i class="fas fa-clock"></i> Deal Belum Bayar
+                </h5>
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-sm mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nama</th>
+                            <th>No HP</th>
+                            <th>Produk</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @forelse($belumBayar as $k)
+
+                        <tr>
+                            <td>{{ $k->nama }}</td>
+                            <td>{{ $k->no_hp }}</td>
+
+                            <td>
+                                {{ $k->produk?->nama ?? '-' }}
+                            </td>
+
+                            <td>
+                                <span class="badge bg-warning">
+                                    Menunggu Pembayaran
+                                </span>
+                            </td>
+                        </tr>
+
+                        @empty
+
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                Tidak ada data
+                            </td>
+                        </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
         <div class="row mt-3">

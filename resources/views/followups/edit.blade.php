@@ -63,12 +63,12 @@
                                 Belum Dihubungi
                             </option>
 
-                            <option value="Belum Bayar" {{ $followUp->status == 'Belum Bayar' ? 'selected' : '' }}>
-                                Belum Bayar
+                            <option value="Follow-Up" {{ $followUp->status == 'Follow-Up' ? 'selected' : '' }}>
+                                Follow-Up
                             </option>
 
-                            <option value="Sudah Bayar" {{ $followUp->status == 'Sudah Bayar' ? 'selected' : '' }}>
-                                Sudah Bayar
+                            <option value="Deal" {{ $followUp->status == 'Deal' ? 'selected' : '' }}>
+                                Deal
                             </option>
 
                         </select>

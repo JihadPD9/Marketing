@@ -61,8 +61,7 @@ class DashboardController extends Controller
         // OMSET BULAN INI
         // =============================
         $totalOmset = Transaksi::whereHas('konsumen', function ($q) use ($user) {
-            $q->where('user_id', $user->id)
-                ->where('status', 'Sudah Bayar');
+            $q->where('user_id', $user->id);
         })
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
