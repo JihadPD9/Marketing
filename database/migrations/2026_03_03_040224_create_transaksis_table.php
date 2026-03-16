@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('konsumen_id')->constrained()->onDelete('cascade');
+            $table->date('tanggal')->default(now());
             $table->foreignId('produk_id')->constrained()->onDelete('cascade');
             $table->integer('qty')->default(1);
             $table->bigInteger('harga_satuan');

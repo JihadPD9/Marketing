@@ -1,191 +1,374 @@
 @extends('layouts.admin2')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-        <div>
-            <h3 class="fw-bold mb-3">📊 Dashboard Marketing</h3>
-            <h6 class="op-7 mb-2">Statistik Performa Bulan {{ now()->translatedFormat('F Y') }}</h6>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-sm-6 col-md-3">
-            <div class="card card-stats card-round">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-icon">
-                            <div class="icon-big text-center icon-info bubble-shadow-small">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Lead Masuk</p>
-                                <h4 class="card-title">{{ $leadMasuk }}</h4>
-                            </div>
-                        </div>
+    <div class="container-fluid">
+
+        <h3 class="fw-bold mb-3">📊 Dashboard Marketing</h3>
+        <p class="text-muted mb-4">
+            Statistik Performa Bulan {{ now()->translatedFormat('F Y') }}
+        </p>
+
+        <div class="row g-3">
+
+            <div class="col-md-3">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="fas fa-bullseye fa-2x text-secondary mb-2"></i>
+                        <p class="text-muted mb-1">Target Lead</p>
+                        <h2 class="fw-bold">{{ $targetLead }}</h2>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-sm-6 col-md-3">
-            <div class="card card-stats card-round">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-icon">
-                            <div class="icon-big text-center icon-success bubble-shadow-small">
-                                <i class="fas fa-handshake"></i>
-                            </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Closing</p>
-                                <h4 class="card-title">{{ $closing }}</h4>
-                            </div>
-                        </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="fas fa-user-plus fa-2x text-primary mb-2"></i>
+                        <p class="text-muted mb-1">Lead Masuk</p>
+                        <h2 class="fw-bold text-primary">{{ $totalLead }}</h2>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="fas fa-handshake fa-2x text-success mb-2"></i>
+                        <p class="text-muted mb-1">Deal</p>
+                        <h2 class="fw-bold text-success">{{ $deal }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="fas fa-user-times fa-2x text-danger mb-2"></i>
+                        <p class="text-muted mb-1">Tidak Tertarik</p>
+                        <h2 class="fw-bold text-danger">{{ $tidakTertarik }}</h2>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="col-md-6">
-            <div class="card card-round shadow-sm">
-                <div class="card-body">
-                    <div class="card-title fw-bold">Target Bulanan</div>
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="text-muted">Progres: {{ round($progress) }}%</span>
-                        <span class="fw-bold text-primary">{{ $target ? 'Rp ' . number_format($target->target_omset,0,',','.') : 'Belum Diset' }}</span>
+
+        <div class="row g-3 mt-2">
+
+            <div class="col-md-6">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                        <p class="text-muted mb-1">Closing</p>
+                        <h2 class="fw-bold text-success">{{ $closing }}</h2>
                     </div>
-                    <div class="progress" style="height: 12px;">
-                        <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" 
-                             role="progressbar" 
-                             style="width: {{ $progress }}%" 
-                             aria-valuenow="{{ $progress }}" 
-                             aria-valuemin="0" 
-                             aria-valuemax="100">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="fas fa-money-bill-wave fa-2x text-primary mb-2"></i>
+                        <p class="text-muted mb-1">Total Omset</p>
+                        <h2 class="fw-bold text-primary">
+                            Rp {{ number_format($totalOmset, 0, ',', '.') }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-3">
+
+            <div class="col-md-6">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+                        <h5 class="fw-bold text-success">
+                            <i class="fas fa-money-check-alt"></i> Deal Sudah Bayar
+                        </h5>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <table class="table table-sm mb-0">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>No HP</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($sudahBayar as $k)
+
+                                    <tr>
+                                        <td>{{ $k->nama }}</td>
+                                        <td>{{ $k->no_hp }}</td>
+                                        <td class="text-success fw-bold">
+                                            {{ $k->transaksis?->sum('total') ?? 0 }}
+                                        </td>
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">
+                                            Belum ada pembayaran
+                                        </td>
+                                    </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+                        <h5 class="fw-bold text-danger">
+                            <i class="fas fa-clock"></i> Deal Belum Bayar
+                        </h5>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <table class="table table-sm mb-0">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>No HP</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($belumBayar as $k)
+
+                                    <tr>
+                                        <td>{{ $k->nama }}</td>
+                                        <td>{{ $k->no_hp }}</td>
+                                        <td>
+                                            <span class="badge bg-warning">
+                                                Menunggu Pembayaran
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">
+                                            Tidak ada data
+                                        </td>
+                                    </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row mt-3">
+
+            <div class="col-md-12">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold">🎯 Target Omset</h5>
+
+                        <div class="d-flex justify-content-between mb-2">
+
+                            <span>
+                                Progress {{ round($progress) }}%
+                            </span>
+
+                            <span class="fw-bold text-primary">
+
+                                {{ $target ? 'Rp ' . number_format($target->target_omset, 0, ',', '.') : 'Belum Diset' }}
+
+                            </span>
+
                         </div>
-                    </div>
-                    <div class="mt-2 text-muted small">
-                        Total Omset Saat Ini: <strong>Rp {{ number_format($totalOmset,0,',','.') }}</strong>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row mt-2">
-        <div class="col-md-8">
-            <div class="card card-round">
-                <div class="card-header">
-                    <div class="card-head-row">
-                        <div class="card-title">📈 Lead per Marketing</div>
+                        <div class="progress">
+
+                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                style="width: {{ $progress }}%"></div>
+
+                        </div>
+
                     </div>
+
                 </div>
-                <div class="card-body">
-                    <div class="chart-container" style="min-height: 300px">
-                        <canvas id="kpiChart"></canvas>
-                    </div>
-                </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-4">
-            <div class="card card-round">
-                <div class="card-header">
-                    <div class="card-title">📅 Follow-Up Hari Ini</div>
+
+
+        <div class="row mt-3">
+
+            <div class="col-md-8">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="fw-bold">📈 Lead per Marketing</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div style="height:300px">
+
+                            <canvas id="kpiChart"></canvas>
+
+                        </div>
+
+                    </div>
+
                 </div>
-                <div class="card-body pb-0">
-                    <div id="followUpList" style="max-height: 320px; overflow-y: auto;">
-                        @forelse($followups as $f)
-                            <div class="d-flex align-items-center border-bottom py-3">
-                                <div class="avatar avatar-sm me-3">
-                                    <span class="avatar-title rounded-circle border border-white bg-warning text-dark">
-                                        <i class="fas fa-phone"></i>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="fw-bold">📅 Follow-Up Hari Ini</h5>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <div style="max-height:300px;overflow-y:auto">
+
+                            @forelse($followups as $f)
+
+                                <div class="d-flex align-items-center border-bottom p-3">
+
+                                    <div class="me-3">
+
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-phone"></i>
+                                        </span>
+
+                                    </div>
+
+                                    <div class="flex-grow-1">
+
+                                        <div class="fw-bold">
+                                            {{ $f->konsumen->nama ?? '-' }}
+                                        </div>
+
+                                        <small class="text-muted">
+                                            {{ $f->konsumen->no_hp ?? '-' }}
+                                        </small>
+
+                                    </div>
+
+                                    <span class="badge bg-warning">
+                                        {{ $f->status }}
                                     </span>
+
                                 </div>
-                                <div class="flex-1 pt-1 ml-2">
-                                    <h6 class="fw-bold mb-1">{{ $f->konsumen ? $f->konsumen->nama : '-' }}</h6>
-                                    <small class="text-muted">{{ $f->konsumen ? $f->konsumen->no_hp : '-' }}</small>
+
+                            @empty
+
+                                <div class="text-center p-4 text-muted">
+                                    Tidak ada follow up hari ini
                                 </div>
-                                <div class="d-flex ms-auto align-items-center">
-                                    <span class="badge badge-warning">{{ $f->status }}</span>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="text-center py-5">
-                                <p class="text-muted">Tidak ada jadwal hari ini</p>
-                            </div>
-                        @endforelse
+
+                            @endforelse
+
+                        </div>
+
                     </div>
-                    <div class="card-footer text-center bg-white border-0">
-                        <a href="{{ route('followups.index') }}" class="btn btn-primary btn-sm btn-round">Lihat Semua</a>
-                    </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
+
+
+
     </div>
-</div>
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // --- Chart Perbaikan agar tidak kotak ---
-    const kpiCtx = document.getElementById('kpiChart').getContext('2d');
-    new Chart(kpiCtx, {
-        type: 'bar',
-        data: {
-            labels: {!! json_encode($kpi->map(fn($item) => $item->user ? $item->user->name : 'Unknown')) !!},
-            datasets: [{
-                label: 'Lead Masuk',
-                data: {!! json_encode($kpi->pluck('total')) !!},
-                backgroundColor: 'rgba(23, 125, 255, 0.7)',
-                borderColor: '#177dff',
-                borderWidth: 1,
-                borderRadius: 10, // Membuat batang melengkung
-                borderSkipped: false,
-                barPercentage: 0.5,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const ctx = document.getElementById('kpiChart').getContext('2d');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: {!! json_encode($kpi->map(fn($i) => $i->user ? $i->user->name : 'Unknown')) !!},
+
+                datasets: [{
+
+                    data: {!! json_encode($kpi->pluck('total')) !!},
+
+                    backgroundColor: 'rgba(23,125,255,0.7)',
+
+                    borderRadius: 10
+
+                }]
+
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
-                    ticks: { stepSize: 1 }
-                },
-                x: {
-                    grid: { display: false }
-                }
+
+            options: {
+
+                plugins: { legend: { display: false } },
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
             }
-        }
-    });
 
-    // --- Live update notification ---
-    async function fetchFollowupsToday() {
-        try {
-            const response = await fetch('{{ route("marketing.followups.today") }}');
-            const data = await response.json();
+        });
 
-            const badge = document.getElementById('followup-count');
-            const textCount = document.getElementById('followup-count-text');
-            
-            if(badge) badge.textContent = data.length;
-            if(textCount) textCount.textContent = data.length;
+    </script>
 
-            // Logic dropdown bisa ditambahkan di sini jika navbar berada dalam satu file
-        } catch (err) {
-            console.error('Error fetching data:', err);
-        }
-    }
-
-    setInterval(fetchFollowupsToday, 60000); // Cek setiap 1 menit
-</script>
-@endpush
 @endsection

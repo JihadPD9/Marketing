@@ -8,6 +8,7 @@ class Transaksi extends Model
 {
     protected $fillable = [
         'konsumen_id',
+        'tanggal',
         'produk_id',
         'qty',
         'harga_satuan',

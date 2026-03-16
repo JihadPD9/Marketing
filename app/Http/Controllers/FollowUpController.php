@@ -50,13 +50,23 @@ class FollowUpController extends Controller
             'follow_up_date' => 'nullable|date_format:Y-m-d\TH:i',
         ]);
 
-        FollowUp::create([
+        $followUp = FollowUp::create([
             'konsumen_id' => $request->konsumen_id,
             'status' => $request->status,
             'catatan' => $request->catatan,
             'follow_up_date' => $request->follow_up_date,
             'user_id' => Auth::id(),
         ]);
+
+        // =====================
+        // UPDATE STATUS KONSUMEN
+        // =====================
+        $konsumen = Konsumen::find($request->konsumen_id);
+
+        if($konsumen){
+            $konsumen->status = $request->status;
+            $konsumen->save();
+        }
 
         return redirect()->route('followups.index')
             ->with('success', 'Follow-up berhasil ditambahkan!');
@@ -67,37 +77,48 @@ class FollowUpController extends Controller
     // FORM EDIT FOLLOW UP
     // =========================
     public function edit($id)
-{
-    $followUp = FollowUp::findOrFail($id);
-    $konsumens = Konsumen::all();
+    {
+        $followUp = FollowUp::findOrFail($id);
+        $konsumens = Konsumen::all();
 
-    return view('followups.edit', compact('followUp','konsumens'));
-}
+        return view('followups.edit', compact('followUp','konsumens'));
+    }
+
 
     // =========================
     // UPDATE FOLLOW UP
     // =========================
-   public function update(Request $request, $id)
-{
-    $followUp = FollowUp::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $followUp = FollowUp::findOrFail($id);
 
-    $request->validate([
-        'konsumen_id' => 'required',
-        'status' => 'required',
-        'catatan' => 'nullable',
-        'follow_up_date' => 'nullable'
-    ]);
+        $request->validate([
+            'konsumen_id' => 'required|exists:konsumens,id',
+            'status' => 'required|string',
+            'catatan' => 'nullable|string',
+            'follow_up_date' => 'nullable'
+        ]);
 
-    $followUp->update([
-        'konsumen_id' => $request->konsumen_id,
-        'status' => $request->status,
-        'catatan' => $request->catatan,
-        'follow_up_date' => $request->follow_up_date
-    ]);
+        $followUp->update([
+            'konsumen_id' => $request->konsumen_id,
+            'status' => $request->status,
+            'catatan' => $request->catatan,
+            'follow_up_date' => $request->follow_up_date
+        ]);
 
-    return redirect()->route('followups.index')
-        ->with('success','Data berhasil diupdate');
-}
+        // =====================
+        // UPDATE STATUS KONSUMEN
+        // =====================
+        $konsumen = Konsumen::find($request->konsumen_id);
+
+        if($konsumen){
+            $konsumen->status = $request->status;
+            $konsumen->save();
+        }
+
+        return redirect()->route('followups.index')
+            ->with('success','Data berhasil diupdate');
+    }
 
 
     // =========================

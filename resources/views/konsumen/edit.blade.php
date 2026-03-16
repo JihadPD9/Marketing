@@ -64,7 +64,7 @@
                 <div class="mb-3">
                     <label class="form-label">Status</label>
                     <select name="status" class="form-select">
-                        @foreach(['Prospek','Deal','Tidak Tertarik'] as $status)
+                        @foreach(['Prospek','Tidak Tertarik'] as $status)
                             <option value="{{ $status }}" {{ old('status', $konsumen->status)==$status ? 'selected' : '' }}>
                                 {{ $status }}
                             </option>

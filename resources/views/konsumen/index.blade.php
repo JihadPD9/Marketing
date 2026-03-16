@@ -3,14 +3,12 @@
 @section('content')
 
     <div class="container">
-
         <h4 class="mb-3">Data Konsumen</h4>
 
-        <a href="{{ route('konsumen.create') }}" class="btn btn-success mb-3">
-            + Tambah Konsumen
-        </a>
         <div class="d-flex align-items-center gap-3 mb-3">
-
+            <a href="{{ route('konsumen.create') }}" class="btn btn-success btn-sm rounded-pill px-3">
+                + Tambah Konsumen
+            </a>
             <!-- IMPORT -->
             <form action="{{ route('konsumen.import') }}" method="POST" enctype="multipart/form-data"
                 class="d-flex align-items-center gap-2">
@@ -44,7 +42,6 @@
 
         </div>
 
-        <br>
 
         @if(session('success'))
             <div class="alert alert-success">
@@ -122,9 +119,28 @@
                                     <td>{{ $k->sumber_lead ?? '-' }}</td>
 
                                     <td>
-                                        <span class="badge bg-secondary">
-                                            {{ $k->status }}
-                                        </span>
+
+                                        @if($k->status == 'Deal')
+                                            <span class="badge bg-success">
+                                                {{ $k->status }}
+                                            </span>
+
+                                        @elseif($k->status == 'Prospek')
+                                            <span class="badge bg-warning text-dark">
+                                                {{ $k->status }}
+                                            </span>
+
+                                        @elseif($k->status == 'Tidak Tertarik')
+                                            <span class="badge bg-danger">
+                                                {{ $k->status }}
+                                            </span>
+
+                                        @else
+                                            <span class="badge bg-secondary">
+                                                {{ $k->status }}
+                                            </span>
+                                        @endif
+
                                     </td>
 
                                     <td>{{ $k->user->name ?? '-' }}</td>
@@ -177,8 +193,8 @@
 
     </div>
 
-
     <!-- LIVE SEARCH -->
+
     <script>
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -204,35 +220,49 @@
                         if (data.length === 0) {
 
                             tableBody.innerHTML = `
-                                        <tr>
-                                        <td colspan="8" class="text-center text-muted">
-                                        Data tidak ditemukan
-                                        </td>
-                                        </tr>
-                                        `
-
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">
+                            Data tidak ditemukan
+                        </td>
+                    </tr>
+                    `
                             return
                         }
 
                         data.forEach(item => {
 
+                            let statusBadge = ""
+
+                            if (item.status === "Deal") {
+                                statusBadge = `<span class="badge bg-success">Deal</span>`
+                            }
+                            else if (item.status === "Prospek") {
+                                statusBadge = `<span class="badge bg-warning text-dark">Prospek</span>`
+                            }
+                            else if (item.status === "Tidak Tertarik") {
+                                statusBadge = `<span class="badge bg-danger">Tidak Tertarik</span>`
+                            }
+                            else {
+                                statusBadge = `<span class="badge bg-secondary">${item.status}</span>`
+                            }
+
                             tableBody.innerHTML += `
-                                        <tr>
-                                        <td>${item.nama}</td>
-                                        <td>${item.no_hp}</td>
-                                        <td>${item.email ?? '-'}</td>
-                                        <td>${item.sumber_lead ?? '-'}</td>
-                                        <td><span class="badge bg-secondary">${item.status}</span></td>
-                                        <td>${item.user ? item.user.name : '-'}</td>
-                                        <td>${item.alamat ?? '-'}</td>
-                                        <td>
-                                        <a href="/konsumen/${item.id}/edit"
-                                        class="btn btn-warning btn-sm">
-                                        Edit
-                                        </a>
-                                        </td>
-                                        </tr>
-                                        `
+                    <tr>
+                        <td>${item.nama}</td>
+                        <td>${item.no_hp}</td>
+                        <td>${item.email ?? '-'}</td>
+                        <td>${item.sumber_lead ?? '-'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${item.user ? item.user.name : '-'}</td>
+                        <td>${item.alamat ?? '-'}</td>
+                        <td>
+                            <a href="/konsumen/${item.id}/edit"
+                            class="btn btn-warning btn-sm">
+                            Edit
+                            </a>
+                        </td>
+                    </tr>
+                    `
                         })
 
                     })
